@@ -1,5 +1,6 @@
 # Alberto, el Gordolito
-Trying to learn C with Vulkan / GLFW
+[Trying to learn C with Vulkan / GLFW using the 'Drawing a triangle' tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Base_code)
+
 
 {:toc}
 
