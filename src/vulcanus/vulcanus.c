@@ -1,4 +1,3 @@
-//#include <vulkan/vulkan.h>
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -27,9 +26,9 @@ const char** glfw_extensions;
 
 int create_instance () {
 
-    printf("Criando app_info...\n");
+    printf("Creating app_info...\n");
 
-    // APPLICATION INFO
+    // First we'll create the app info
     VkApplicationInfo app_info;
 
     app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -44,9 +43,12 @@ int create_instance () {
 
     app_info.apiVersion = VK_API_VERSION_1_0;
 
-    printf("Criando create_info...\n");
+    printf("Creating create_info...\n");
 
-    // INSTANCE CREATE INFO
+    /*
+     * All of the create_info struct fields must be filled or we'll
+     * end up with segmentation fault.
+     */
     VkInstanceCreateInfo create_info;
 
     create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -59,31 +61,35 @@ int create_instance () {
 
     create_info.ppEnabledExtensionNames = glfw_extensions;
 
+    // Defaulting to 0
     create_info.enabledLayerCount = 0;
 
+    // Defaulting to 0
     create_info.flags = 0;
 
+    // Defaulting to NULL
     create_info.ppEnabledLayerNames = NULL;
 
+    // Defaulting to NULL
     create_info.pNext = NULL;
 
-    printf("Criando result...\n");
+    printf("Creating the vulkan instance with the calculated create_info and app_info\n");
 
-    // RESULT 
-    // @FIXME("segmentation fault!")
+    // RESULT
     VkResult result = vkCreateInstance(&create_info, NULL, &instance);
-
-    printf("Instance criada!\n");
 
     if (result == VK_SUCCESS) {
 
-        printf("Retornando TRUE...\n");
+        printf("Vulkan instance created\n");
 
+        // Success!
         return TRUE;
     }
 
-    printf("Retornando FALSE...\n");
+    printf("Something went wrong while creating instance :-(\n");
 
+    // Something's wrong. We'll inform
+    // the caller of the failure with FALSE
     return FALSE;
 
 }
