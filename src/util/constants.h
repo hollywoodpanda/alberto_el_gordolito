@@ -1,0 +1,10 @@
+#ifndef CONSTANTS_HEADER
+#define CONSTANTS_HEADER
+
+#define VULCANUS_WINDOW_WIDTH 800
+#define VULCANUS_WINDOW_HEIGHT 600
+
+#define TRUE 1
+#define FALSE 0
+
+#endif
