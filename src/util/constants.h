@@ -7,4 +7,7 @@
 #define TRUE 1
 #define FALSE 0
 
+// Switch to 0 to hide some debug messages.
+#define DEBUG 1
+
 #endif
