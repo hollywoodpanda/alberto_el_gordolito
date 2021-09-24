@@ -53,7 +53,10 @@ int create_instance () {
 
     printf("starting create info\n");
 
-    // INSTANCE CREATE INFO
+    /*
+     * All of the create_info struct fields must be filled or we'll
+     * end up with segmentation fault.
+     */
     VkInstanceCreateInfo create_info;
 
     create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -66,18 +69,21 @@ int create_instance () {
 
     create_info.ppEnabledExtensionNames = glfw_extensions;
 
+    // Defaulting to 0
     create_info.enabledLayerCount = 0;
 
+    // Defaulting to 0
     create_info.flags = 0;
 
+    // Defaulting to NULL
     create_info.ppEnabledLayerNames = NULL;
 
+    // Defaulting to NULL
     create_info.pNext = NULL;
 
     printf("requesting instance\n");
 
-    // RESULT 
-    // @FIXME("segmentation fault!")
+    // RESULT
     VkResult result = vkCreateInstance(&create_info, NULL, &instance);
 
     printf("an instance result has been returned\n");
@@ -86,11 +92,14 @@ int create_instance () {
 
         printf("instance result is successful\n");
 
+        // Success!
         return TRUE;
     }
 
     printf("instance request failed\n");
 
+    // Something's wrong. We'll inform
+    // the caller of the failure with FALSE
     return FALSE;
 
 }
