@@ -1,5 +1,3 @@
-//#include <vulkan/vulkan.h>
-
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
@@ -21,13 +19,22 @@ GLFWwindow* window;
  */ 
 VkInstance instance;
 
-uint32_t glfw_extension_count = 0;
-
-const char** glfw_extensions;
 
 int create_instance () {
 
-    printf("Criando app_info...\n");
+    printf("creating instance\n");
+
+    /**
+     * The extensions available
+     */ 
+    uint32_t glfw_extension_count = 0;
+
+    /**
+     * The extension names
+     */ 
+    const char** glfw_extensions;
+
+    printf("starting app info\n");
 
     // APPLICATION INFO
     VkApplicationInfo app_info;
@@ -44,7 +51,7 @@ int create_instance () {
 
     app_info.apiVersion = VK_API_VERSION_1_0;
 
-    printf("Criando create_info...\n");
+    printf("starting create info\n");
 
     // INSTANCE CREATE INFO
     VkInstanceCreateInfo create_info;
@@ -67,30 +74,62 @@ int create_instance () {
 
     create_info.pNext = NULL;
 
-    printf("Criando result...\n");
+    printf("requesting instance\n");
 
     // RESULT 
     // @FIXME("segmentation fault!")
     VkResult result = vkCreateInstance(&create_info, NULL, &instance);
 
-    printf("Instance criada!\n");
+    printf("an instance result has been returned\n");
 
     if (result == VK_SUCCESS) {
 
-        printf("Retornando TRUE...\n");
+        printf("instance result is successful\n");
 
         return TRUE;
     }
 
-    printf("Retornando FALSE...\n");
+    printf("instance request failed\n");
 
     return FALSE;
+
+}
+
+void print_extensions () {
+
+    uint32_t extension_count = 0;
+
+    // First we get the extension count...
+    vkEnumerateInstanceExtensionProperties(NULL, &extension_count, NULL);
+
+    // Then we create the array with the count's size
+    VkExtensionProperties extension_list[extension_count];
+
+    // Filling the extension list with the extensions!
+    vkEnumerateInstanceExtensionProperties(
+        NULL, 
+        &extension_count, 
+        extension_list
+    );
+
+    // Iterating over the extensions
+    for (uint32_t i = 0; i < extension_count; i++) {
+
+        printf(
+            "Vulkan extension %i: %s\n", 
+            (i + 1), 
+            extension_list[i].extensionName
+        );
+
+    }
 
 }
 
 void cleanup () {
 
     printf("cleanup\n");
+
+    vkDestroyInstance(instance, NULL);
 
     glfwDestroyWindow(window);
 
@@ -100,7 +139,7 @@ void cleanup () {
 
 void init_window () {
 
-     printf("init_window\n");
+     printf("starting window\n");
 
     // 1. Calling init
     glfwInit();
@@ -125,7 +164,7 @@ void init_window () {
 
 void init_vulkan () {
     
-    printf("init_vulkan\n");
+    printf("starting vulkan\n");
 
     if (create_instance() != TRUE) {
 
@@ -139,7 +178,7 @@ void init_vulkan () {
 
 void main_loop () {
     
-    printf("main_loop\n");
+    printf("main loop\n");
     
     while (! glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -149,14 +188,20 @@ void main_loop () {
 
 void vulcanify () {
 
+    printf("vulcanizing\n");
+
     init_window();
 
     init_vulkan();
+
+    if (DEBUG) {
+        print_extensions();
+    }
 
     main_loop();
 
     cleanup();
 
-    return;
+    printf("vulcanize process ended\n");
 
 }
